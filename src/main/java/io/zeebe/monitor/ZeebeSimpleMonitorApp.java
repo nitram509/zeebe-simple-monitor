@@ -36,17 +36,19 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 @EnableZeebeClient
 @EnableScheduling
 @EnableAsync
 @EnableSpringDataWebSupport
+@EnableTransactionManagement
 public class ZeebeSimpleMonitorApp {
+
   @Value("${server.allowedOriginsUrls}")
   private String allowedOriginsUrls;
 
@@ -94,7 +96,8 @@ public class ZeebeSimpleMonitorApp {
           LOG.warn("can't determine version info from manifest, error: " + e.getMessage());
         }
       } else {
-          LOG.warn("MANIFEST.MF file not present in classpath; will use 'dev' as version information");
+        LOG.warn(
+            "MANIFEST.MF file not present in classpath; will use 'dev' as version information");
       }
     }
     final Attributes attributes = new Attributes();
@@ -105,7 +108,7 @@ public class ZeebeSimpleMonitorApp {
   @Bean
   public WebMvcConfigurer corsConfigurer() {
     final String urls = this.allowedOriginsUrls;
-    return new WebMvcConfigurerAdapter() {
+    return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         if (StringUtils.hasText(urls)) {
