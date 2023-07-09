@@ -16,6 +16,7 @@
 package io.zeebe.monitor.repository;
 
 import io.zeebe.monitor.entity.ProcessInstanceEntity;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,4 +40,8 @@ public interface ProcessInstanceRepository
       long parentProcessInstanceKey, Pageable pageable);
 
   long countByParentProcessInstanceKey(long parentProcessInstanceKey);
+
+  Page<ProcessInstanceEntity> findByStartLessThan(long start, Pageable pageable);
+
+  void deleteByKeyIn(List<Long> keys);
 }

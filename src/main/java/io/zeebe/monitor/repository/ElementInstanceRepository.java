@@ -16,9 +16,12 @@
 package io.zeebe.monitor.repository;
 
 import io.zeebe.monitor.entity.ElementInstanceEntity;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ElementInstanceRepository extends CrudRepository<ElementInstanceEntity, String> {
 
   Iterable<ElementInstanceEntity> findByProcessInstanceKey(long processInstanceKey);
+
+  void deleteByProcessInstanceKeyIn(List<Long> keys);
 }

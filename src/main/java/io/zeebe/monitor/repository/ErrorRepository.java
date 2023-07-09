@@ -16,6 +16,7 @@
 package io.zeebe.monitor.repository;
 
 import io.zeebe.monitor.entity.ErrorEntity;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -25,4 +26,6 @@ public interface ErrorRepository extends PagingAndSortingRepository<ErrorEntity,
   Page<ErrorEntity> findByProcessInstanceKey(long processInstanceKey, Pageable pageable);
 
   long countByProcessInstanceKey(long processInstanceKey);
+
+  void deleteByProcessInstanceKeyIn(List<Long> keys);
 }

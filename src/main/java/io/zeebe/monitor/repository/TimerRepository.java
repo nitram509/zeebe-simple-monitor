@@ -28,4 +28,6 @@ public interface TimerRepository extends PagingAndSortingRepository<TimerEntity,
   long countByProcessInstanceKey(Long processInstanceKey);
 
   List<TimerEntity> findByProcessDefinitionKeyAndProcessInstanceKeyIsNull(Long processInstanceKey);
+
+  void deleteByProcessInstanceKeyIn(List<Long> keys);
 }

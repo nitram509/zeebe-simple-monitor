@@ -30,6 +30,8 @@ spring:
     web:
       pageable:
         default-page-size: 10
+    auto-delete-data-enabled: false
+    auto-delete-data-after-days: 30
 
 server:
   port: 8082
