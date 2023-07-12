@@ -14,9 +14,12 @@ import io.zeebe.monitor.repository.VariableRepository;
 import io.zeebe.monitor.rest.ExceptionHandler;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
+import java.util.zip.Adler32;
+import java.util.zip.CRC32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +86,21 @@ public class AutomaticDataCleaner {
 
   private void avoid_parallel_runs_collide_by_delay() {
     try {
-      Thread.sleep(RandomGenerator.getDefault().nextLong(8192, 2 * 8192));
+      Thread.sleep(createRandomValueWithoutJre());
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Workaround for https://github.com/adoptium/temurin-build/issues/2843 Because we see
+   * IllegalArgumentException at runtime
+   *
+   * @return a random value between 8192 ... 16384
+   */
+  private long createRandomValueWithoutJre() {
+    Adler32 adler32 = new Adler32();
+    adler32.update((int) System.currentTimeMillis());
+    return 8192 + adler32.getValue() % 8192;
   }
 }
