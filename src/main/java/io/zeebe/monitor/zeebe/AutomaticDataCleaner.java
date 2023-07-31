@@ -32,7 +32,7 @@ public class AutomaticDataCleaner {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandler.class);
 
-  private static final int NO_OF_INSTANCES_TO_DELETE = 512;
+  private static final int NO_OF_INSTANCES_TO_DELETE = 32;
 
   @Autowired private ProcessInstanceRepository processInstanceRepository;
   @Autowired private ElementInstanceRepository elementInstanceRepository;
