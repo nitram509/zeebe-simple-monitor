@@ -14,12 +14,9 @@ import io.zeebe.monitor.repository.VariableRepository;
 import io.zeebe.monitor.rest.ExceptionHandler;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
-import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.zip.Adler32;
-import java.util.zip.CRC32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +69,8 @@ public class AutomaticDataCleaner {
         instances.stream().map(ProcessInstanceEntity::getKey).collect(Collectors.toList());
 
     if (keys.size() > 0) {
-      LOG.info("Deleting (house keeping) " + keys.size() + " process instances.");
+      LOG.info("Deleting (house keeping) " + keys.size() + " process instances. [START]");
+      long start = System.currentTimeMillis();
       elementInstanceRepository.deleteByProcessInstanceKeyIn(keys);
       variableRepository.deleteByProcessInstanceKeyIn(keys);
       jobRepository.deleteByProcessInstanceKeyIn(keys);
@@ -81,6 +79,14 @@ public class AutomaticDataCleaner {
       timerRepository.deleteByProcessInstanceKeyIn(keys);
       errorRepository.deleteByProcessInstanceKeyIn(keys);
       processInstanceRepository.deleteByKeyIn(keys);
+
+      long end = System.currentTimeMillis();
+      LOG.info(
+          "Deleting (house keeping) "
+              + keys.size()
+              + " process instances. [Done. took "
+              + (end - start) / 1000
+              + "s]");
     }
   }
 
