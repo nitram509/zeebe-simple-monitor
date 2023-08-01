@@ -49,7 +49,7 @@ public class AutomaticDataCleaner {
   @Value("${spring.data.auto-delete-data-after-days}")
   private Integer autoDeleteDataAfterDays;
 
-  @Scheduled(fixedDelay = 60 * 60 * 1000L)
+  @Scheduled(fixedDelay = 60 * 1000L)
   @Transactional
   public void autoDeleteOldInstanceData() {
     if (!autoDeleteDataEnabled) {
